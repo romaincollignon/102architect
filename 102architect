@@ -1,0 +1,108 @@
+#!/usr/bin/python3
+
+import math, sys
+import math
+from math import *
+from sys import *
+
+def verif_error():
+    flag = ["-t", "-z", "-r", "-s"]
+    tab_verif = []
+    for i in range(3, len(sys.argv)):
+        if (sys.argv[i] in flag):
+            tab_verif.append(sys.argv[i])
+    if (len(tab_verif) == 1):
+        if (sys.argv[3] == "-r"):
+            if(len(sys.argv) < 5):
+                stderr.write("Error Argument : check your augments\n")
+                sys.exit(84)
+        elif (sys.argv[3] == "-t"):
+            if(len(sys.argv) < 6):
+                stderr.write("Error Argument : check your augments\n")
+                sys.exit(84)
+        elif (sys.argv[3] == "-s"):
+            if(len(sys.argv) < 5):
+                stderr.write("Error Argument : check your augments\n")
+                sys.exit(84)
+        elif (sys.argv[3] == "-z"):
+            if(len(sys.argv) < 6):
+                stderr.write("Error Argument : check your augments\n")
+                sys.exit(84)
+    elif (len(tab_verif) == 0):
+        stderr.write("Flag does not exist")
+        sys.exit(84)
+    return 0
+
+def my_round(n, decimals = 0):
+    multiplier = 10 ** decimals
+    return math.ceil(n * multiplier) / multiplier
+
+def main() :
+    if (len(argv) < 3):
+            sys.exit(84)
+    if (len(argv) == 4):
+        sys.exit(84)
+
+    verif_error()
+
+    try :
+        x = sys.argv[1]
+        y = sys.argv[2]
+        int_x = int (x)
+        int_y = int (y)
+
+    except ValueError:
+            stderr.write("Error Argument : wrong type of argument.\n")
+            sys.exit(84)
+
+    except IndexError :
+        sys.exit(84)
+
+    i = 3
+
+    tab = [1.00, 0.00, 0.00,
+            0.00, 1.00, 0.00,
+            0.00, 0.00, 1.00]
+
+    for i in range(len(sys.argv)) :
+        if sys.argv[i] == "-r" :
+            r_a = float(sys.argv[i + 1])
+            print("Rotation by a %.0f" %r_a, " degree angle", sep="")
+            tab[0] = math.cos(float(sys.argv[i + 1]) / 180 * math.pi)
+            tab[4] = tab[0]
+            tab[1] = -math.sin(float(sys.argv[i + 1]) / 180 * math.pi)
+            tab[3] = math.sin(float(sys.argv[i + 1]) / 180 * math.pi)
+
+        if sys.argv[i] == "-t" :
+            t_i2 = float(sys.argv[i + 1])
+            t_j2 = float(sys.argv[i + 2])
+            print("Translation along vector (%.0f" %t_i2, ", %.0f" %t_j2, \
+                ")", sep="")
+            tab[2] = float(sys.argv[i + 1]) + tab[2]
+            tab[5] = float(sys.argv[i + 2]) + tab[5]
+
+        if sys.argv[i] == "-s" :
+            s_a = float(sys.argv[i + 1])
+            print("Reflection over an axis with an inclination ", \
+                "angle of %.0f" %s_a, " degrees", sep="")
+            tab[0] = math.cos(2 * float(sys.argv[i + 1]) / 180 * math.pi)
+            tab[4] = -tab[0]
+            tab[1] = math.sin(2 * float(sys.argv[i + 1]) / 180 * math.pi)
+            tab[3] = math.sin(2 * float(sys.argv[i + 1]) / 180 * math.pi)
+
+        if sys.argv[i] == "-z" :
+            z_i2 = float(sys.argv[i + 1])
+            z_j3 = float(sys.argv[i + 2])
+            print("Scaling by factors %.0f" %z_i2, " and %.0f" %z_j3, sep="")
+            tab[0] = float(sys.argv[i + 1]) * tab[0]
+            tab[4] = float(sys.argv[i + 2]) * tab[4]
+
+    calc01 = tab[0] * int_x + tab[1] * int_y + tab[2]
+    calc02 = tab[3] * int_x + tab[4] * int_y + tab[5]
+    print("%.2f" %tab[0], "\t%.2f" %tab[1], "\t%.2f" %tab[2], sep = "")
+    print("%.2f" %tab[3], "\t%.2f" %tab[4], "\t%.2f" %tab[5], sep = "")
+    print("%.2f" %tab[6], "\t%.2f" %tab[7], "\t%.2f" %tab[8], sep = "")
+    print("(%.2f" %int_x, ", %.2f" %int_y, ") => (%.2f" %calc01, ", %.2f" %calc02, ")",
+        sep = "")
+    return 0
+main()
